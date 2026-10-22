@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GoalIQ Football Predictor</title>
+<style>
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background: #101827;
+  color: white;
+}
+.card {
+  max-width: 500px;
+  margin: 25px auto;
+  padding: 22px;
+  background: #1d293b;
+  border-radius: 14px;
+}
+h1 { color: #47e6a1; }
+input, button {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 14px;
+  margin: 9px 0;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+}
+button {
+  background: #36d99a;
+  color: #102018;
+  font-weight: bold;
+}
+#result {
+  white-space: pre-wrap;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.small { color: #c6d0df; font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>⚽ GoalIQ</h1>
+  <p>Advanced Football Match Predictor</p>
+  <p class="small">Enter a match to request an analysis.</p>
+
+  <form id="matchForm">
+    <input id="home" placeholder="Home team" required>
+    <input id="away" placeholder="Away team" required>
+    <button type="submit">Analyse Match</button>
+  </form>
+
+  <div id="result">Your analysis will appear here.</div>
+  <p class="small">
+    Predictions are estimates, not guaranteed results.
+  </p>
+</div>
+
+<script>
+document.getElementById("matchForm").addEventListener("submit",
+async function(event) {
+  event.preventDefault();
+  document.getElementById("result").textContent =
+    "Checking the server...";
+
+  try {
+    const response = await fetch("/api/health");
+    const data = await response.json();
+
+    document.getElementById("result").textContent =
+      "Server status: " + data.status +
+      "\nAPI key configured: " + data.api_key_configured +
+      "\n\nLive match analysis is not connected yet.";
+  } catch (error) {
+    document.getElementById("result").textContent =
+      "Could not contact the server. Please try again later.";
+  }
+});
+</script>
+</body>
+  </html>
